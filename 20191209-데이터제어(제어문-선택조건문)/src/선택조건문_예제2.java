@@ -1,6 +1,6 @@
-// ÄÄÇ»ÅÍ ³­¼ö , »ç¿ëÀÚ ÀÔ·Â  ==> °¡À§,¹ÙÀ§,º¸ 
+// ì»´í“¨í„° ë‚œìˆ˜ , ì‚¬ìš©ì ì…ë ¥  ==> ê°€ìœ„,ë°”ìœ„,ë³´ ==> aaaaaa ë‹¤ì‹œ
 import java.util.Scanner;
-public class ¼±ÅÃÁ¶°Ç¹®_¿¹Á¦2 {
+public class ì„ íƒì¡°ê±´ë¬¸_ì˜ˆì œ2 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -9,44 +9,44 @@ public class ¼±ÅÃÁ¶°Ç¹®_¿¹Á¦2 {
 		
 		
 		Scanner scan=new Scanner(System.in);
-		System.out.print("°¡À§(0),¹ÙÀ§(1),º¸(2):");
+		System.out.print("ê°€ìœ„(0),ë°”ìœ„(1),ë³´(2):");
 		int user=scan.nextInt();
 		
-		String[] value= {"°¡À§","¹ÙÀ§","º¸"};
+		String[] value= {"ê°€ìœ„","ë°”ìœ„","ë³´"};
 		
-		System.out.println("ÄÄÇ»ÅÍ:"+value[com]+",ÇÃ·¹ÀÌ¾î:"+value[user]);
-		// ¼±ÅÃ
+		System.out.println("ì»´í“¨í„°:"+value[com]+",í”Œë ˆì´ì–´:"+value[user]);
+		// ì„ íƒ
 		/*
-		 * if(com==0) System.out.println("ÄÄÇ»ÅÍ:°¡À§"); if(com==1)
-		 * System.out.println("ÄÄÇ»ÅÍ:¹ÙÀ§"); if(com==2) System.out.println("ÄÄÇ»ÅÍ:º¸");
+		 * if(com==0) System.out.println("ì»´í“¨í„°:ê°€ìœ„"); if(com==1)
+		 * System.out.println("ì»´í“¨í„°:ë°”ìœ„"); if(com==2) System.out.println("ì»´í“¨í„°:ë³´");
 		 * 
 		 * 
-		 * if(user==0) System.out.println("ÇÃ·¹ÀÌ¾î:°¡À§"); if(user==1)
-		 * System.out.println("ÇÃ·¹ÀÌ¾î:¹ÙÀ§"); if(user==2) System.out.println("ÇÃ·¹ÀÌ¾î:º¸");
+		 * if(user==0) System.out.println("í”Œë ˆì´ì–´:ê°€ìœ„"); if(user==1)
+		 * System.out.println("í”Œë ˆì´ì–´:ë°”ìœ„"); if(user==2) System.out.println("í”Œë ˆì´ì–´:ë³´");
 		 */
 		
-		// °á°ú  ==> com-user
+		// ê²°ê³¼  ==> com-user
 		/*
-		 * if(com==0) //°¡À§ { if(user==0)// °¡À§ ==> 0 { System.out.println("ºñ°å´Ù"); }
-		 * if(user==1)// ¹ÙÀ§ ==> -1 { System.out.println("ÇÃ·¹ÀÌ¾î Win!!"); } if(user==2) //º¸
-		 * ==> -2 { System.out.println("ÄÄÇ»ÅÍ Win!!"); } } if(com==1) //¹ÙÀ§ { if(user==0)//
-		 * °¡À§ ==> 1 { System.out.println("ÄÄÇ»ÅÍ Win!!"); } if(user==1)// ¹ÙÀ§ ==> 0 {
-		 * System.out.println("ºñ°å´Ù"); } if(user==2) //º¸ ==> -1 {
-		 * System.out.println("ÇÃ·¹ÀÌ¾î Win!!"); } } if(com==2) //º¸ { if(user==0)// °¡À§ 2 {
-		 * System.out.println("ÇÃ·¹ÀÌ¾î Win!!"); } if(user==1)// ¹ÙÀ§ 1 {
-		 * System.out.println("ÄÄÇ»ÅÍ Win!!"); } if(user==2) //º¸ 0 {
-		 * System.out.println("ºñ°å´Ù"); } }
+		 * if(com==0) //ê°€ìœ„ { if(user==0)// ê°€ìœ„ ==> 0 { System.out.println("ë¹„ê²¼ë‹¤"); }
+		 * if(user==1)// ë°”ìœ„ ==> -1 { System.out.println("í”Œë ˆì´ì–´ Win!!"); } if(user==2) //ë³´
+		 * ==> -2 { System.out.println("ì»´í“¨í„° Win!!"); } } if(com==1) //ë°”ìœ„ { if(user==0)//
+		 * ê°€ìœ„ ==> 1 { System.out.println("ì»´í“¨í„° Win!!"); } if(user==1)// ë°”ìœ„ ==> 0 {
+		 * System.out.println("ë¹„ê²¼ë‹¤"); } if(user==2) //ë³´ ==> -1 {
+		 * System.out.println("í”Œë ˆì´ì–´ Win!!"); } } if(com==2) //ë³´ { if(user==0)// ê°€ìœ„ 2 {
+		 * System.out.println("í”Œë ˆì´ì–´ Win!!"); } if(user==1)// ë°”ìœ„ 1 {
+		 * System.out.println("ì»´í“¨í„° Win!!"); } if(user==2) //ë³´ 0 {
+		 * System.out.println("ë¹„ê²¼ë‹¤"); } }
 		 */
 		
 		// player ==> -1,2 // com ==> 1,-2
 		
 		int result=com-user;
 		if(result==-1 || result==2)
-			System.out.println("ÇÃ·¹ÀÌ¾î Win!!");
+			System.out.println("í”Œë ˆì´ì–´ Win!!");
 		if(result==1 || result==-2)
-			System.out.println("ÄÄÇ»ÅÍ Win!!");
+			System.out.println("ì»´í“¨í„° Win!!");
 		if(result==0)
-			System.out.println("ºñ°å´Ù!!");
+			System.out.println("ë¹„ê²¼ë‹¤!!");
 		
 	}
 
