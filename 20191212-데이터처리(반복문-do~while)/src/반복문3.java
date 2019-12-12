@@ -6,6 +6,8 @@ public class ¹Ýº¹¹®3 {
         int kor=0,eng=0,math=0,total=0,avg=0;
         char score='A';
         
+        int[] first=new int[6];
+        
         int kor1=0,eng1=0,math1=0,total1=0,avg1=0;
         char score1='A';
         
