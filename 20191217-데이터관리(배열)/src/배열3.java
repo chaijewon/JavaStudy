@@ -20,6 +20,7 @@ public class 배열3 {
 		Document doc=Jsoup.connect("https://movie.daum.net/premovie/released").get();
 		Elements link=doc.select("div.info_tit a.name_movie");
 	    int k=1;
+	    //String ss=true+null;
 		for(int i=0;i<16;i++)
 		{
 		 try{
@@ -45,7 +46,10 @@ public class 배열3 {
 
 																								
 								<dd class="txt_main">애니메이션/어드벤처/코미디/판타지/뮤지컬</dd>
+			 span class="thumb_summary #info #poster">
+															<img src="//img1.daumcdn.net/thumb/C155x225/?fname=http%3A%2F%2Ft1.daumcdn.net%2Fmovie%2F5afd212b68e34e61a964d969dd898e2f1574298873981" class="img_summary" 
 			 */
+			Element poster=doc2.select("span.thumb_summary img.img_summary").get(0);
 			Element genre=doc2.select("dl.list_movie dd.txt_main").get(0);
 			Element regdate=doc2.select("dl.list_movie dd.txt_main").get(1);
 			Element grade=doc2.select("dl.list_movie dd").get(3);
@@ -68,6 +72,7 @@ public class 배열3 {
 			m[i].regdate=regdate.text();
 			m[i].director=director.text();
 			m[i].actor=actor.text();
+			m[i].poster=poster.attr("src");
 			k++;
 		  }catch(Exception ex) {k--;}
 		}

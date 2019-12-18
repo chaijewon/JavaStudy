@@ -10,15 +10,16 @@ Frozen II
 (주연) 박지윤, 소연, 이장원, 장민혁, 크리스틴 벨, 이디나 멘젤, 조시 게드, 조나단 그로프
  */
 public class Movie {
-   String title_kr;
-   String title_en;
-   double score;
-   String genre;
-   String regdate;
-   int time;
-   String grade;
-   String director;
-   String actor;
+   public String title_kr;
+   public String title_en;
+   public double score;
+   public String genre;
+   public String regdate;
+   public int time;
+   public String grade;
+   public String director;
+   public String actor;
+   public String poster; 
 }
 
 
