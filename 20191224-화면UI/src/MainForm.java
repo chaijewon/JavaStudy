@@ -8,8 +8,9 @@ public class MainForm extends JFrame implements ActionListener{
    CardLayout card=new CardLayout();
    MainForm() {
 	  setLayout(card);
-	  add("GAME",gr);
 	  add("LOGIN",login);
+	  add("GAME",gr);
+	  
 	  add("WR",wr);
 	  
 	  setSize(1024, 768);
@@ -24,14 +25,17 @@ public class MainForm extends JFrame implements ActionListener{
 			JFrame.setDefaultLookAndFeelDecorated(true);
 		}
 		catch(Exception e){}
-	   MainForm mf=new MainForm();
+	    new MainForm();
+	    
    }
+  
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource()==login.b1)
 		{
 			card.show(getContentPane(), "WR");
+			//this.show();
 		}
 	}
 }
