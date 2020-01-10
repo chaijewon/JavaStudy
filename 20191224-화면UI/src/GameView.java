@@ -204,6 +204,7 @@ public class GameView extends JPanel{
 // repaint => update(){clearRect() paint()}
 		@Override
 		public void update(Graphics g) {
+			
 			paint(g);
 		}
 

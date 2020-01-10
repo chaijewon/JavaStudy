@@ -8,8 +8,9 @@ public class MainForm extends JFrame implements ActionListener{
    CardLayout card=new CardLayout();
    MainForm() {
 	  setLayout(card);
-	  add("LOGIN",login);
 	  add("GAME",gr);
+	  add("LOGIN",login);
+	  
 	  
 	  add("WR",wr);
 	  
