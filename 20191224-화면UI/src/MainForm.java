@@ -12,6 +12,8 @@ public class MainForm extends JFrame implements ActionListener{
 	  add("LOGIN",login);
 	  
 	  
+	  
+	  
 	  add("WR",wr);
 	  
 	  setSize(1024, 768);

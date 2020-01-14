@@ -174,8 +174,8 @@ public class GameView extends JPanel{
 	}
 
 	public class Test extends Canvas {
-		private int x = -30;
-		private int y = -30;
+		private int x=-30;
+		private int y=-30;
 		Color c = Color.green;
 		int size = 20;
 
