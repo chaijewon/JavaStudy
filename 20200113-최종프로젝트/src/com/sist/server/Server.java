@@ -29,12 +29,15 @@ public class Server implements Runnable{
     			// 접속을 했다면 => 클라이언트의 정보수집 => IP,PORT(Socket)
     			Socket s=ss.accept();
     			// s(클라이언트의 정보 (ip,port) => Thread로 전송 (각자마다 통신을 할 수 있다)
+    		    Client client=new Client(s);
+    		    client.start();
     		}
     	}catch(Exception ex) {}
     }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+        Server server=new Server();
+        new Thread(server).start();
 	}
 	// 통신을 담당하는 부분(각클라이언트마다 따로 작업을 한다)
 	class Client extends Thread
@@ -59,6 +62,47 @@ public class Server implements Runnable{
 			}catch(Exception ex) {}
 		}
 		
+		// 클라이언트와 통신 
+		public void run()
+		{
+			// 100|hong|홍길동|남자\n
+			try
+			{
+				while(true)
+				{
+					String msg=in.readLine();
+					StringTokenizer st=
+							new StringTokenizer(msg,"|");
+					int protocol=Integer.parseInt(st.nextToken());
+					switch(protocol)
+					{
+					   case Function.LOGIN:
+					   {
+						   id=st.nextToken();
+						   name=st.nextToken();
+						   sex=st.nextToken();
+						   pos="대기실";
+						   
+						   
+						   messageAll(Function.LOGIN+"|"
+								   +id+"|"+name+"|"+sex+"|"+pos);
+						   
+						   waitVc.add(this);
+						   
+						   messageTo(Function.MYLOG+"|"+id);
+						   
+						   for(Client user:waitVc)
+						   {
+							   messageTo(Function.LOGIN+"|"
+						        +user.id+"|"+user.name+"|"
+						        +user.sex+"|"+user.pos);
+						   }
+						   break;
+					   }
+					}
+				}
+			}catch(Exception ex) {}
+		}
 		// 반복을 제거 => 메소드 
 		// 서버에서 => 전송 
 		// 개인적으로 전송
