@@ -12,7 +12,8 @@ import java.io.*;
 public class MainForm extends JFrame implements ActionListener,Runnable{
    Login login=new Login();
    WaitRoom wr=new WaitRoom();
-   //GameRoom gr=new GameRoom();
+   GameRoom gr=new GameRoom();
+   MakeRoom mr=new MakeRoom();
    CardLayout card=new CardLayout();
    // 서버 연결과 관련된 라이브러리
    Socket s;// 서버연결
@@ -25,13 +26,21 @@ public class MainForm extends JFrame implements ActionListener,Runnable{
     */
    MainForm() {
 	  setLayout(card);
-	  //add("GAME",gr);
 	  add("LOGIN",login);
 	  add("WR",wr);
-	  
-	  setSize(1024, 768);
+	  add("GAME",gr);
+	  setBounds(448,216,1024, 768);
 	  setVisible(true);// 윈도우 보여라 
+	  
+	  setResizable(false);// 크기 조절 방지 => 화면 고정
+	  setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	  login.b1.addActionListener(this);
+	  wr.tf.addActionListener(this);
+	  wr.b6.addActionListener(this);// 나가기 
+	  wr.b1.addActionListener(this);// 방만들기 
+	  
+	  mr.b1.addActionListener(this);// 실제 방만들기
+	  mr.b2.addActionListener(this);
    }
    public static void main(String[] args) {
 	   try
@@ -87,7 +96,104 @@ public class MainForm extends JFrame implements ActionListener,Runnable{
 				connection(result);
 			}
 		}
-	}
+		else if(e.getSource()==wr.tf)// 대기실채팅
+		{
+			// 입력된 문자열 읽기
+			String msg=wr.tf.getText();
+			if(msg.length()<1)// 입력이 안된 경우
+			{
+				wr.tf.requestFocus();
+				return;
+			}
+			
+			// 서버로 전송 
+			try
+			{
+				out.write((Function.WAITCHAT+"|"+msg+"\n").getBytes());
+			}catch(Exception ex) {}
+			
+			wr.tf.setText("");
+		}
+		// 나가기(대기실)
+		else if(e.getSource()==wr.b6)
+		{
+			try
+			{
+				out.write((Function.EXIT+"|\n").getBytes());
+				/*
+				 *   나가기 => 요청 
+				 *           ===
+				 *           처리 ==> 서버 
+				 *           결과출력 => 클라이언트 
+				 */
+			}catch(Exception ex) {}
+		}
+		else if(e.getSource()==wr.b1) //방만들기 버튼 클릭 
+		{
+			mr.tf.setText("");
+			mr.rb1.setSelected(true);
+			mr.box.setSelectedIndex(0);
+			mr.la4.setVisible(false);
+			mr.pf.setVisible(false);
+			mr.pf.setText("");
+			mr.tf.requestFocus();
+			mr.setVisible(true);
+		}
+		else if(e.getSource()==mr.b1)
+		{
+			// 1. 방이름 
+			String rn=mr.tf.getText();
+			if(rn.length()<1)
+			{
+				JOptionPane.showMessageDialog(this, "방이름을 입력하세요");
+				mr.tf.requestFocus();
+				return;
+			}
+			
+			for(int i=0;i<wr.model1.getRowCount();i++)
+			{
+				String roomName=wr.model1.getValueAt(i, 0).toString();
+				if(rn.equals(roomName))
+				{
+					JOptionPane.showMessageDialog(this,
+							"이미 존재하는 방입니다\n다시입력하세요");
+					mr.tf.setText("");
+					mr.tf.requestFocus();
+					return;
+				}
+			}
+			
+			// 공개 비공개
+			String rs="";//상태
+			String rp="";//비밀번호 
+			if(mr.rb1.isSelected())
+			{
+				rs="공개";
+				rp=" ";
+			}
+			else
+			{
+				rs="비공개";
+				rp=String.valueOf(mr.pf.getPassword());
+			}
+			
+			// 인원
+			int inwon=mr.box.getSelectedIndex()+2;
+			
+			// 서버로 전송 
+			try
+			{
+				out.write((Function.MAKEROOM+"|"+rn+"|"
+			                +rs+"|"+rp+"|"+inwon+"\n").getBytes());
+			}catch(Exception ex) {}
+            mr.setVisible(false);			
+			
+		}
+		else if(e.getSource()==mr.b2)
+		{
+			mr.setVisible(false);
+		}
+	}// actionPerformed end
 	public void connection(String userData)
 	{
 		try
@@ -137,6 +243,41 @@ public class MainForm extends JFrame implements ActionListener,Runnable{
 					  setTitle(id);
 					  card.show(getContentPane(), "WR");
 					  break;
+				  }
+				  case Function.WAITCHAT:
+				  {
+					  wr.tp.append(st.nextToken()+"\n");
+					  break;
+				  }
+				  case Function.EXIT: // 남아 있는 사람 
+				  {
+					  String id=st.nextToken();
+					  for(int i=0;i<wr.model2.getRowCount();i++)
+					  {
+						  String mid=wr.model2.getValueAt(i,0).toString();
+						  // (String)wr.model2.getValueAt(i,0)
+						  if(mid.equals(id))
+						  {
+							  wr.model2.removeRow(i);
+							  break;
+						  }
+					  }
+					  break;
+				  }
+				  case Function.MYEXIT: // 실제 나가는 사람 처리
+				  {
+					  dispose();// 메모리 회수
+					  System.exit(0);// 프로그램 종료
+				  }
+				  case Function.MAKEROOM:
+				  {
+					 String[] data= {
+						st.nextToken(), // 방이름
+						st.nextToken(), // 상태(공개/비공개)
+						st.nextToken()  //  1/6
+					 };
+					 wr.model1.addRow(data);
+					 break;  
 				  }
 				}
 				

@@ -72,13 +72,14 @@ public class MemberDAO {
 			   String mpwd=rs.getString(2);
 			   String name=rs.getString(3);
 			   String sex=rs.getString(4);
+			   int avata=rs.getInt(5);
 			   System.out.println(name+"  "+sex);
 			   rs.close();
 			   
 			   if(mpwd.equals(pwd))
 			   {
 				  // ·Î±×ÀÎ   
-				  result=mid+"|"+name+"|"+sex;
+				  result=mid+"|"+name+"|"+sex+"|"+avata;
 			   }
 			   else
 			   {

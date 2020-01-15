@@ -5,7 +5,7 @@ import javax.swing.table.*;
 public class WaitRoom extends JPanel{
       JTable table1,table2;
       DefaultTableModel model1,model2;
-      JTextPane tp;
+      JTextArea tp;
       JTextField tf;
       JButton b1,b2,b3,b4,b5,b6;
       JLabel la=new JLabel();
@@ -28,7 +28,7 @@ public class WaitRoom extends JPanel{
     	  js1.setBounds(10, 15, 600, 400);
     	  js2.setBounds(10, 420, 600,290 );
     	  
-    	  tp=new JTextPane();
+    	  tp=new JTextArea();
     	  tp.setEditable(false);
     	  tf=new JTextField();
     	  b1=new JButton("방만들기");
@@ -59,6 +59,10 @@ public class WaitRoom extends JPanel{
     	  add(js3);
     	  add(js1);
     	  add(js2);
+    	  
+		/*
+		 * String[] data= {"빨리와","공개","1/6"}; model1.addRow(data);
+		 */
       }
       public Image getImageSizeChange(ImageIcon icon,int width,int height)
       {

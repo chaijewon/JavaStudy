@@ -11,6 +11,7 @@ public class Server implements Runnable{
 	private final int PORT=3355;
 	// 접속자 저장 공간 
 	private Vector<Client> waitVc=new Vector<Client>();
+	private Vector<Room> roomVc=new Vector<Room>();
 	public Server()
 	{
 		try
@@ -43,6 +44,7 @@ public class Server implements Runnable{
 	class Client extends Thread
 	{
 		String id,name,sex,pos;
+		int avata;
 		// pos=> 방위치 
 		// 통신 
 		Socket s;// 통신장비 
@@ -70,7 +72,8 @@ public class Server implements Runnable{
 			{
 				while(true)
 				{
-					String msg=in.readLine();
+					String msg=in.readLine();// 클라이언트가 전송값(요청)
+					System.out.println("Client=>"+msg);
 					StringTokenizer st=
 							new StringTokenizer(msg,"|");
 					int protocol=Integer.parseInt(st.nextToken());
@@ -81,6 +84,7 @@ public class Server implements Runnable{
 						   id=st.nextToken();
 						   name=st.nextToken();
 						   sex=st.nextToken();
+						   avata=Integer.parseInt(st.nextToken());
 						   pos="대기실";
 						   
 						   
@@ -97,6 +101,60 @@ public class Server implements Runnable{
 						        +user.id+"|"+user.name+"|"
 						        +user.sex+"|"+user.pos);
 						   }
+						   
+						   // 개설된 방정보 전송 
+						   for(Room room:roomVc)
+						   {
+							   messageTo(Function.MAKEROOM+"|"+room.roomName+"|"
+									   +room.roomState+"|"
+									   +room.current+"/"+room.maxcount);
+						   }
+						   
+						   break;
+					   }
+					   case Function.WAITCHAT:
+					   {
+						   messageAll(Function.WAITCHAT+"|["+name+"]"+st.nextToken());
+						   break;
+					   }
+					   case Function.EXIT:
+					   {
+						   String mid=id;
+						   for(int i=0;i<waitVc.size();i++)
+						   {
+							   Client user=waitVc.get(i);
+							   if(mid.equals(user.id))
+							   {
+								   // 윈도우 종료
+								   messageTo(Function.MYEXIT+"|");
+								   // Vector에서 제거
+								   waitVc.remove(i);
+								   // 닫기(통신 종료)
+								   in.close();
+								   out.close();
+								   break;
+							   }
+						   }
+						   // 전체 메세지 => 나가는 유저를 테이블에서 삭제
+						   messageAll(Function.EXIT+"|"+mid);
+						   break;
+					   }
+					   case Function.MAKEROOM:
+					   {
+						   /*
+						    *   Function.MAKEROOM+"|"+rn+"|"
+			                +rs+"|"+rp+"|"+inwon+
+						    */
+						   Room room=new Room(st.nextToken(), st.nextToken(), st.nextToken(), Integer.parseInt(st.nextToken()));
+						   room.userVc.add(this);
+						   
+						   roomVc.add(room);
+						   pos=room.roomName;
+						   
+						   messageAll(Function.MAKEROOM+"|"+room.roomName+"|"
+								   +room.roomState+"|"
+								   +room.current+"/"+room.maxcount);
+						   
 						   break;
 					   }
 					}
