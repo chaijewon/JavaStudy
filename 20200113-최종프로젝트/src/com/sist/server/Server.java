@@ -150,14 +150,14 @@ public class Server implements Runnable{
 						   
 						   roomVc.add(room);
 						   pos=room.roomName;
-						   
+						   room.bang=id;
 						   messageAll(Function.MAKEROOM+"|"+room.roomName+"|"
 								   +room.roomState+"|"
 								   +room.current+"/"+room.maxcount);
 						   
 						   // 방에 들어가게 만든다 
 						   messageTo(Function.ROOMIN+"|"+room.roomName+"|"
-								   +id+"|"+sex+"|"+avata);
+								   +id+"|"+sex+"|"+avata+"|"+room.bang);
 						   break;
 					   }
 					   case Function.ROOMIN:
@@ -188,7 +188,7 @@ public class Server implements Runnable{
 								   for(Client user:room.userVc)
 								   {
 									   user.messageTo(Function.ROOMADD+"|"
-											  +id+"|"+sex+"|"+avata);
+											  +id+"|"+sex+"|"+avata+"|"+room.bang);
 									   user.messageTo(Function.ROOMCHAT
 											   +"|[알림 ☞]"+id+"님이 입장하셨습니다");
 								   }
@@ -196,14 +196,14 @@ public class Server implements Runnable{
 								   // 본인 처리
 								   room.userVc.add(this);
 								   messageTo(Function.ROOMIN+"|"+room.roomName+"|"
-										   +id+"|"+sex+"|"+avata);
+										   +id+"|"+sex+"|"+avata+"|"+room.bang);
 								   
 								   for(Client user:room.userVc)
 								   {
 									   if(!id.equals(user.id))
 									   {
 										   messageTo(Function.ROOMADD+"|"
-												+user.id+"|"+user.sex+"|"+user.avata);
+												+user.id+"|"+user.sex+"|"+user.avata+"|"+room.bang);
 									   }
 								   }
 							   }

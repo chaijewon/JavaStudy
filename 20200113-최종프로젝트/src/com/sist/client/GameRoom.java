@@ -19,7 +19,7 @@ public class GameRoom extends JPanel{
 		   pans[i]=new JPanel();
 		   pans[i].setBackground(Color.black);
 		   ids[i]=new JTextField();
-		   ids[i].setEnabled(false);
+		   ids[i].setEditable(false);
 	   }
 	   setLayout(null);
 	   pans[0].setBounds(10, 15, 150,120 );

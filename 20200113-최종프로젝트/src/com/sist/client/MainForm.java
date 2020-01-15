@@ -225,6 +225,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 			{
 				// 100|hong|홍길동|남자|대기실\n
 				String msg=in.readLine();
+				System.out.println("Server=>"+msg);
 				StringTokenizer st=new StringTokenizer(msg,"|");
 				int protocol=Integer.parseInt(st.nextToken());
 				switch(protocol)
@@ -292,6 +293,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  String id=st.nextToken();
 					  String sex=st.nextToken();
 					  String avata=st.nextToken();
+					  String bang=st.nextToken();
 					  
 					  String temp="";
 					  if(sex.equals("남자"))
@@ -318,6 +320,21 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 							  break;
 						  }
 					  }
+					  
+					 for(int i=0;i<6;i++)
+						  {
+							  String bid=gr.ids[i].getText();
+							  if(bid.equals(bang))
+							  {
+								  gr.ids[i].setBackground(Color.green);
+								  gr.b1.setEnabled(true);
+								  gr.b2.setEnabled(true);
+								  gr.b3.setEnabled(true);
+								  gr.b4.setEnabled(true);
+							  }
+						  }
+					 
+					 
 					  break;
 				  }
 				  case Function.ROOMADD:
@@ -325,7 +342,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  String id=st.nextToken();
 					  String sex=st.nextToken();
 					  String avata=st.nextToken();
-					  
+					  String bang=st.nextToken();
 					  String temp="";
 					  if(sex.equals("남자"))
 					  {
@@ -350,6 +367,21 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 							  break;
 						  }
 					  }
+					  
+					  for(int i=0;i<6;i++)
+					  {
+						  String bid=gr.ids[i].getText();
+						  if(bid.equals(bang))
+						  {
+							  gr.ids[i].setBackground(Color.green);
+							  gr.b1.setEnabled(true);
+							  gr.b2.setEnabled(true);
+							  gr.b3.setEnabled(true);
+							  gr.b4.setEnabled(true);
+						  }
+					  }
+				 
+					 
 					  break;
 				  }
 				  case Function.ROOMCHAT:
