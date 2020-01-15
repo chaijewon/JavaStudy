@@ -14,7 +14,16 @@ public class WaitRoom extends JPanel{
     	  la.setIcon(new ImageIcon(getImageSizeChange(new ImageIcon("c:\\image\\file.jpg"),380,150)));
     	  String[] col1={"방이름","공개/비공개","인원"};
     	  String[][] row1=new String[0][3];
-    	  model1=new DefaultTableModel(row1,col1);
+    	  model1=new DefaultTableModel(row1,col1) 
+    	  {
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+    		    
+    	  };
     	  table1=new JTable(model1);
     	  JScrollPane js1=new JScrollPane(table1);
     	  

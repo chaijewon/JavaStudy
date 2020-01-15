@@ -155,6 +155,59 @@ public class Server implements Runnable{
 								   +room.roomState+"|"
 								   +room.current+"/"+room.maxcount);
 						   
+						   // 방에 들어가게 만든다 
+						   messageTo(Function.ROOMIN+"|"+room.roomName+"|"
+								   +id+"|"+sex+"|"+avata);
+						   break;
+					   }
+					   case Function.ROOMIN:
+					   {
+						   // Function.ROOMIN+"|"+rn
+						   String rn=st.nextToken();
+						   /*
+						    *    1. 방이름을 받는다 
+						    *    2. 방을 찾는다 (roomVc)
+						    *    3. pos,current를 변경
+						    *    ====================
+						    *    =  방에 있는 사람처리 => ROOMADD
+						    *       1. 방에 입장하는 사람의 정보 전송(id,avata..)
+						    *       2. 입장메세지 전송 
+						    *    =  방에 들어가는 사람 처리 
+						    *       1. 방에 들어가라 => ROOIN
+						    *       2. 방에 있는 사람들의 정보를 보내준다 
+						    *    =  대기실 변경 
+						    *       인원수가 변경 => 메세지 전송 
+						    */
+						   for(Room room:roomVc)
+						   {
+							   if(rn.equals(room.roomName))// 방찾기
+							   {
+								   pos=room.roomName;
+								   room.current++;
+								   
+								   for(Client user:room.userVc)
+								   {
+									   user.messageTo(Function.ROOMADD+"|"
+											  +id+"|"+sex+"|"+avata);
+									   user.messageTo(Function.ROOMCHAT
+											   +"|[알림 ☞]"+id+"님이 입장하셨습니다");
+								   }
+								   
+								   // 본인 처리
+								   room.userVc.add(this);
+								   messageTo(Function.ROOMIN+"|"+room.roomName+"|"
+										   +id+"|"+sex+"|"+avata);
+								   
+								   for(Client user:room.userVc)
+								   {
+									   if(!id.equals(user.id))
+									   {
+										   messageTo(Function.ROOMADD+"|"
+												+user.id+"|"+user.sex+"|"+user.avata);
+									   }
+								   }
+							   }
+						   }
 						   break;
 					   }
 					}

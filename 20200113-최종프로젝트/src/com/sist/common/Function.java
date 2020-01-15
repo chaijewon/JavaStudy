@@ -24,6 +24,7 @@ public class Function {
    public static final int WAITUPDATE=250;
    public static final int POSCHANGE=260;
    public static final int WAITCHAT=270;
+   public static final int ROOMCHAT=280;
    public static final int EXIT=900;
    public static final int MYEXIT=910;
 }

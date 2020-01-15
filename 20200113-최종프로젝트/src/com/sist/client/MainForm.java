@@ -9,7 +9,7 @@ import com.sist.dao.*;
 import java.util.*;
 import java.net.*;
 import java.io.*;
-public class MainForm extends JFrame implements ActionListener,Runnable{
+public class MainForm extends JFrame implements ActionListener,Runnable,MouseListener{
    Login login=new Login();
    WaitRoom wr=new WaitRoom();
    GameRoom gr=new GameRoom();
@@ -24,6 +24,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable{
     *                           
     *   2) 서버에서 들어오는 데이터 => Thread => 출력 (Function)
     */
+   String myRoom;
    MainForm() {
 	  setLayout(card);
 	  add("LOGIN",login);
@@ -41,6 +42,8 @@ public class MainForm extends JFrame implements ActionListener,Runnable{
 	  
 	  mr.b1.addActionListener(this);// 실제 방만들기
 	  mr.b2.addActionListener(this);
+	  
+	  wr.table1.addMouseListener(this);
    }
    public static void main(String[] args) {
 	   try
@@ -279,10 +282,139 @@ public class MainForm extends JFrame implements ActionListener,Runnable{
 					 wr.model1.addRow(data);
 					 break;  
 				  }
+				  case Function.ROOMIN:
+				  {
+					  /*
+					   *  Function.ROOMIN+"|"+room.roomName+"|"
+								   +id+"|"+sex+"|"+avata
+					   */
+					  myRoom=st.nextToken();
+					  String id=st.nextToken();
+					  String sex=st.nextToken();
+					  String avata=st.nextToken();
+					  
+					  String temp="";
+					  if(sex.equals("남자"))
+					  {
+						  temp="m"+avata; // m1.png,m2.png...
+					  }
+					  else
+					  {
+						  temp="w"+avata; // w1.png,w2.png
+					  }
+					  
+					  // 화면 이동 
+					  card.show(getContentPane(), "GAME");
+					  for(int i=0;i<6;i++)
+					  {
+						  if(gr.sw[i]==false)
+						  {
+							  gr.sw[i]=true;
+							  gr.pans[i].removeAll();
+							  gr.pans[i].setLayout(new BorderLayout());
+							  gr.pans[i].add("Center",new JLabel(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\"+temp+".png"), 150, 120))));
+							  gr.pans[i].validate();
+							  gr.ids[i].setText(id);
+							  break;
+						  }
+					  }
+					  break;
+				  }
+				  case Function.ROOMADD:
+				  {
+					  String id=st.nextToken();
+					  String sex=st.nextToken();
+					  String avata=st.nextToken();
+					  
+					  String temp="";
+					  if(sex.equals("남자"))
+					  {
+						  temp="m"+avata; // m1.png,m2.png...
+					  }
+					  else
+					  {
+						  temp="w"+avata; // w1.png,w2.png
+					  }
+					  
+					  
+					  for(int i=0;i<6;i++)
+					  {
+						  if(gr.sw[i]==false)
+						  {
+							  gr.sw[i]=true;
+							  gr.pans[i].removeAll();
+							  gr.pans[i].setLayout(new BorderLayout());
+							  gr.pans[i].add("Center",new JLabel(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\"+temp+".png"), 150, 120))));
+							  gr.pans[i].validate();
+							  gr.ids[i].setText(id);
+							  break;
+						  }
+					  }
+					  break;
+				  }
+				  case Function.ROOMCHAT:
+				  {
+					  gr.ta.append(st.nextToken()+"\n");
+					  break;
+				  }
 				}
 				
 			}
 		}catch(Exception ex) {}
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==wr.table1)
+		{
+			if(e.getClickCount()==2)// 더블 클릭 
+			{
+				// 방이름 
+				int row=wr.table1.getSelectedRow();
+				String rn=wr.model1.getValueAt(row,0).toString();
+				String inwon=wr.model1.getValueAt(row,2).toString();
+				//String state=wr.model1.getValueAt(row, 1).toString();
+				StringTokenizer st=new StringTokenizer(inwon,"/");
+				// 1/5
+				int no1=Integer.parseInt(st.nextToken());// 1
+				int no2=Integer.parseInt(st.nextToken());// 5
+				if(no1==no2)
+				{
+					// 방에 들어갈 수 없다
+					JOptionPane.showMessageDialog(this, 
+							"이미 방인원이 찼습니다\n다른 방을 선택하세요");
+				}
+				else
+				{
+					// 방에 들어갈 수 있다
+					try
+					{
+						out.write((Function.ROOMIN+"|"+rn+"\n").getBytes());
+					}catch(Exception ex) {}
+				}
+				
+			}
+		}
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
