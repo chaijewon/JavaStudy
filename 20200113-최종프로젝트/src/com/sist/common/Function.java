@@ -25,6 +25,10 @@ public class Function {
    public static final int POSCHANGE=260;
    public static final int WAITCHAT=270;
    public static final int ROOMCHAT=280;
+   public static final int KANG=300;
+   public static final int INVATE=310;
+   public static final int INVATE_YES=320;
+   public static final int INVATE_NO=330;
    public static final int EXIT=900;
    public static final int MYEXIT=910;
 }

@@ -24,7 +24,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
     *                           
     *   2) 서버에서 들어오는 데이터 => Thread => 출력 (Function)
     */
-   String myRoom;
+   String myRoom,myId;
    MainForm() {
 	  setLayout(card);
 	  add("LOGIN",login);
@@ -44,6 +44,11 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 	  mr.b2.addActionListener(this);
 	  
 	  wr.table1.addMouseListener(this);
+	  
+	  // 방안에서 채팅 등록 
+	  gr.tf.addActionListener(this);
+	  gr.b5.addActionListener(this);// 방나가기 버튼 
+	  gr.b2.addActionListener(this);// 강퇴
    }
    public static void main(String[] args) {
 	   try
@@ -196,6 +201,33 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 		{
 			mr.setVisible(false);
 		}
+		else if(e.getSource()==gr.tf)
+		{
+			String msg=gr.tf.getText();
+			if(msg.length()<1)
+				return;
+			try
+			{
+				out.write((Function.ROOMCHAT+"|"+myRoom+"|"+msg+"\n").getBytes());
+			}catch(Exception ex){}
+			
+			gr.tf.setText("");
+		}
+		else if(e.getSource()==gr.b5)// 방나가기
+		{
+			try
+			{
+				out.write((Function.ROOMOUT+"|"+myRoom+"\n").getBytes());
+			}catch(Exception ex) {}
+		}
+		else if(e.getSource()==gr.b2)
+		{
+			String youId=gr.box.getSelectedItem().toString();
+			try
+			{
+				out.write((Function.KANG+"|"+myRoom+"|"+youId+"\n").getBytes());
+			}catch(Exception ex){}
+		}
 	}// actionPerformed end
 	public void connection(String userData)
 	{
@@ -294,7 +326,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  String sex=st.nextToken();
 					  String avata=st.nextToken();
 					  String bang=st.nextToken();
-					  
+					  myId=id;
 					  String temp="";
 					  if(sex.equals("남자"))
 					  {
@@ -321,19 +353,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 						  }
 					  }
 					  
-					 for(int i=0;i<6;i++)
-						  {
-							  String bid=gr.ids[i].getText();
-							  if(bid.equals(bang))
-							  {
-								  gr.ids[i].setBackground(Color.green);
-								  gr.b1.setEnabled(true);
-								  gr.b2.setEnabled(true);
-								  gr.b3.setEnabled(true);
-								  gr.b4.setEnabled(true);
-							  }
-						  }
-					 
+					   
 					 
 					  break;
 				  }
@@ -367,21 +387,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 							  break;
 						  }
 					  }
-					  
-					  for(int i=0;i<6;i++)
-					  {
-						  String bid=gr.ids[i].getText();
-						  if(bid.equals(bang))
-						  {
-							  gr.ids[i].setBackground(Color.green);
-							  gr.b1.setEnabled(true);
-							  gr.b2.setEnabled(true);
-							  gr.b3.setEnabled(true);
-							  gr.b4.setEnabled(true);
-						  }
-					  }
-				 
-					 
+					  gr.box.addItem(id);
 					  break;
 				  }
 				  case Function.ROOMCHAT:
@@ -389,11 +395,136 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  gr.ta.append(st.nextToken()+"\n");
 					  break;
 				  }
+				  case Function.WAITUPDATE:
+				  {
+					  /*
+					   * Function.WAITUPDATE+"|"+room.roomName+"|"
+										   +room.current+"/"+room.maxcount+"|"+id+"|"+pos
+					   */
+					  String rn=st.nextToken();
+					  String current=st.nextToken();
+					  String maxcount=st.nextToken();
+					  String id=st.nextToken();
+					  String pos=st.nextToken();
+					  
+					  // 테이블에서 방을 찾는다 
+					  for(int i=0;i<wr.model1.getRowCount();i++)
+					  {
+						  String roomName=wr.model1.getValueAt(i, 0).toString();
+						  if(rn.equals(roomName))
+						  {
+							  if(Integer.parseInt(current)==0)
+							  {
+								  wr.model1.removeRow(i);
+							  }
+							  else
+							  {
+							      wr.model1.setValueAt(current+"/"+maxcount, i, 2);
+							  }
+							  break;
+						  }
+					  }
+					  // 접속자 목록 변경 
+					  for(int i=0;i<wr.model2.getRowCount();i++)
+					  {
+						  String mid=wr.model2.getValueAt(i, 0).toString();
+						  if(mid.equals(id))
+						  {
+							  wr.model2.setValueAt(pos, i, 3);
+							  break;
+						  }
+					  }
+					  break; 
+				  }
+				  
+				  case Function.POSCHANGE:
+				  {
+					  String id=st.nextToken();
+					  String pos=st.nextToken();
+					  for(int i=0;i<wr.model2.getRowCount();i++)
+					  {
+						  String mid=wr.model2.getValueAt(i, 0).toString();
+						  if(mid.equals(id))
+						  {
+							  wr.model2.setValueAt(pos, i, 3);
+							  break;
+						  }
+					  }
+					  break;
+				  }
+				  case Function.ROOMOUT:
+				  {
+					  String id=st.nextToken();
+					  for(int i=0;i<6;i++)
+					  {
+						  String mid=gr.ids[i].getText();
+						  if(id.equals(mid))
+						  {
+							  gr.sw[i]=false;
+							  gr.pans[i].removeAll();
+							  gr.pans[i].setLayout(new BorderLayout());
+							  gr.pans[i].add("Center",new JLabel(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\def.png"), 150, 120))));
+							  gr.pans[i].validate();
+							  gr.ids[i].setText("");
+							  break;
+						  }
+					  }
+					  break;
+				  }
+				  case Function.MYROOMOUT:
+				  {
+					  // 초기화 
+					  for(int i=0;i<6;i++)
+					  {
+						  gr.sw[i]=false;
+						  gr.pans[i].removeAll();
+						  gr.pans[i].setLayout(new BorderLayout());
+						  gr.pans[i].add("Center",new JLabel(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\def.png"), 150, 120))));
+						  gr.pans[i].validate();
+						  gr.ids[i].setText("");
+					  }
+					  gr.ta.setText("");
+					  gr.tf.setText("");
+					  card.show(getContentPane(), "WR");
+					  break;
+				  }
+				  case Function.KANG:
+				  {
+					  String rn=st.nextToken();
+					  JOptionPane.showMessageDialog(this, rn+"방에서 강퇴되었습니다");
+					  out.write((Function.ROOMOUT+"|"+rn+"\n").getBytes());
+					  break;
+				  }
 				}
 				
 			}
 		}catch(Exception ex) {}
 	}
+	/*
+	 *    switch(no)
+	 *    {
+	 *       case 1:
+	 *       {
+	 *          int num=3;
+	 *          break;
+	 *       }
+	 *       case 2:
+	 *          int num=5;
+	 *          break;
+	 *       case 3:
+	 *          int num=7;
+	 *          break;
+	 *    }
+	 *    
+	 *    for()
+	 *    {
+	 *       for()
+	 *       {
+	 *          break;
+	 *       }
+	 *       
+	 *    }
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub

@@ -57,10 +57,10 @@ public class WaitRoom extends JPanel{
     	  la.setBounds(615, 455, 380, 150);
     	  add(la);
     	  JPanel p=new JPanel();
-    	  p.setLayout(new GridLayout(3,2,5,5));
-    	  p.add(b1);p.add(b2);
-    	  p.add(b3);p.add(b4);
-    	  p.add(b5);p.add(b6);
+    	  p.setLayout(new GridLayout(2,1,5,5));
+    	  p.add(b1);p.add(b6);
+    	  //p.add(b3);p.add(b4);
+    	  //p.add(b5);p.add(b6);
     	  
     	  p.setBounds(615,610,380,100);
     	  
