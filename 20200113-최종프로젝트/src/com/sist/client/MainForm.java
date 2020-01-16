@@ -503,7 +503,20 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  gr.games.setImage(1);
 					  gr.games.repaint();
 					  new ProgressThread().start();
+					  break;
+				  }
+				  case Function.NEXT:
+				  {
 					  
+					  gr.games.setImage(Integer.parseInt(st.nextToken()));
+					  gr.games.repaint();
+					  gr.bar.setValue(0);
+					  new ProgressThread().start();
+					  break;
+				  }
+				  case Function.END:
+				  {
+					  JOptionPane.showMessageDialog(this, "게임이 종료되었습니다");
 				  }
 				}
 				
@@ -601,9 +614,16 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				{
 					gr.bar.setValue(i);
 					Thread.sleep(100);
+					
+					if(i==100)
+					{
+						out.write((Function.NEXT+"|"+myRoom+"|"+(++imageNo)+"\n").getBytes());
+						break;
+					}
 				}
 				
-				out.write((Function.NEXT+"|"+myRoom+"|"+(++imageNo)+"\n").getBytes());
+				
+				//imageNo++;
 			}catch(Exception ex) {}
 		}
 	}

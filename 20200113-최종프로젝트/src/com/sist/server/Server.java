@@ -313,6 +313,29 @@ public class Server implements Runnable{
 						   }
 						   break;
 					   }
+					   case Function.NEXT:
+					   {
+						   String rn=st.nextToken();
+						   String imageNo=st.nextToken();
+						   for(Room room:roomVc)
+						   {
+							  if(room.roomName.equals(rn))
+							  {
+								   for(Client user:room.userVc)
+								   {
+									   if(Integer.parseInt(imageNo)>10)
+									   {
+										   user.messageTo(Function.END+"|");
+									   }
+									   else
+									   {
+										   user.messageTo(Function.NEXT+"|"+imageNo);
+									   }
+								   }
+							  }
+						   }
+						   break;
+					   }
 					}
 				}
 			}catch(Exception ex) {}
