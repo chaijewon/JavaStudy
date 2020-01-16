@@ -12,6 +12,10 @@ public class GameRoom extends JPanel{
    
    boolean[] sw=new boolean[6];
    JComboBox box=new JComboBox();
+   
+   JLabel la=new JLabel("정답입력");
+   JProgressBar bar=new JProgressBar();
+   JTextField dapTf=new JTextField(15);
    public GameRoom()
    {
 	   for(int i=0;i<6;i++)
@@ -64,10 +68,23 @@ public class GameRoom extends JPanel{
 		   add(ids[i]);
 	   }
 	   
+	   bar.setBackground(Color.white);
+	   bar.setForeground(Color.pink);
+	   bar.setMaximum(100);
+	   bar.setMinimum(0);
+	   bar.setStringPainted(true);
 	   //games.setBackground(Color.white);
-	   games.setBounds(170, 15, 670, 485);
+	   games.setBounds(170, 15, 670, 400);
 	   add(games);
 	   
+	   JPanel pp=new JPanel();
+	   pp.add(la);
+	   pp.add(dapTf);
+	   pp.setBounds(170, 425, 670, 35);
+	   add(pp);
+	   
+	   bar.setBounds(170, 465,670, 30);
+	   add(bar);
 	   JScrollPane js=new JScrollPane(ta);
 	   ta.setEditable(false);
 	   js.setBounds(10, 510, 830, 180);

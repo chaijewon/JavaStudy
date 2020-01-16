@@ -212,6 +212,14 @@ public class Server implements Runnable{
 								   // 대기실 갱신 
 								   messageAll(Function.WAITUPDATE+"|"+room.roomName+"|"
 										   +room.current+"|"+room.maxcount+"|"+id+"|"+pos);
+								   
+								   if(room.current==room.maxcount)
+								   {
+									   for(Client user:room.userVc)
+									   {
+										   user.messageTo(Function.START+"|[알림 ☞] 게임을 시작합니다");
+									   }
+								   }
 							   }
 							   
 						   }

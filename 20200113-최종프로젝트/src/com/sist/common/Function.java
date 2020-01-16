@@ -31,4 +31,9 @@ public class Function {
    public static final int INVATE_NO=330;
    public static final int EXIT=900;
    public static final int MYEXIT=910;
+   
+   public static final int START=500;
+   public static final int NEXT=510;
+   public static final int END=520;
+   
 }

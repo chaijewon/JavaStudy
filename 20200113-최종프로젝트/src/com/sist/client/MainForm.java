@@ -25,6 +25,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
     *   2) 서버에서 들어오는 데이터 => Thread => 출력 (Function)
     */
    String myRoom,myId;
+   int imageNo=1;
    MainForm() {
 	  setLayout(card);
 	  add("LOGIN",login);
@@ -495,11 +496,21 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  out.write((Function.ROOMOUT+"|"+rn+"\n").getBytes());
 					  break;
 				  }
+				  case Function.START:
+				  {
+					  //JOptionPane.showMessageDialog(this, st.nextToken());
+					  gr.ta.append(st.nextToken()+"\n");
+					  gr.games.setImage(1);
+					  gr.games.repaint();
+					  new ProgressThread().start();
+					  
+				  }
 				}
 				
 			}
 		}catch(Exception ex) {}
 	}
+	
 	/*
 	 *    switch(no)
 	 *    {
@@ -578,6 +589,23 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	class ProgressThread extends Thread
+	{
+		public void run()
+		{
+			try
+			{
+				for(int i=0;i<=100;i++)
+				{
+					gr.bar.setValue(i);
+					Thread.sleep(100);
+				}
+				
+				out.write((Function.NEXT+"|"+myRoom+"|"+(++imageNo)+"\n").getBytes());
+			}catch(Exception ex) {}
+		}
 	}
 }
 
