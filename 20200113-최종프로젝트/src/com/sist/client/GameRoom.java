@@ -95,8 +95,8 @@ public class GameRoom extends JPanel{
 	   
 	   b1=new JButton("초대하기");
 	   b2=new JButton("강퇴하기");
-	   b3=new JButton("게임준비");
-	   b4=new JButton("게임시작");
+	   b3=new JButton("게임시작");
+	   b4=new JButton("다음문제");
 	   b5=new JButton("나가기");
 	   box.addItem("강퇴선택");
 	   

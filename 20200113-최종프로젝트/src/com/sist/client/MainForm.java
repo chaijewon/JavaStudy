@@ -26,7 +26,9 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
     */
    String myRoom,myId;
    int imageNo=1;
+   ProgressThread pt;
    MainForm() {
+	   pt=new ProgressThread();
 	  setLayout(card);
 	  add("LOGIN",login);
 	  add("WR",wr);
@@ -50,6 +52,8 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 	  gr.tf.addActionListener(this);
 	  gr.b5.addActionListener(this);// 방나가기 버튼 
 	  gr.b2.addActionListener(this);// 강퇴
+	  gr.b3.addActionListener(this);
+	  gr.b4.addActionListener(this);
    }
    public static void main(String[] args) {
 	   try
@@ -229,6 +233,23 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				out.write((Function.KANG+"|"+myRoom+"|"+youId+"\n").getBytes());
 			}catch(Exception ex){}
 		}
+		else if(e.getSource()==gr.b3)
+		{
+			gr.games.setImage(imageNo);
+			gr.games.repaint();
+		}
+		else if(e.getSource()==gr.b4)
+		{
+			imageNo++;
+			if(imageNo>10)
+			{
+			   System.out.println("게임종료!!");
+			   return;
+			}
+			gr.games.setImage(imageNo);
+			gr.games.repaint();
+			
+		}
 	}// actionPerformed end
 	public void connection(String userData)
 	{
@@ -354,7 +375,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 						  }
 					  }
 					  
-					   
+					  gr.bar.setValue(0);
 					 
 					  break;
 				  }
@@ -487,6 +508,8 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  gr.ta.setText("");
 					  gr.tf.setText("");
 					  card.show(getContentPane(), "WR");
+					  
+					  pt.interrupt();
 					  break;
 				  }
 				  case Function.KANG:
@@ -500,20 +523,13 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				  {
 					  //JOptionPane.showMessageDialog(this, st.nextToken());
 					  gr.ta.append(st.nextToken()+"\n");
-					  gr.games.setImage(1);
+					  gr.games.setImage(0);
 					  gr.games.repaint();
-					  new ProgressThread().start();
+					  pt=new ProgressThread();
+					  pt.start();
 					  break;
 				  }
-				  case Function.NEXT:
-				  {
-					  
-					  gr.games.setImage(Integer.parseInt(st.nextToken()));
-					  gr.games.repaint();
-					  gr.bar.setValue(0);
-					  new ProgressThread().start();
-					  break;
-				  }
+				  
 				  case Function.END:
 				  {
 					  JOptionPane.showMessageDialog(this, "게임이 종료되었습니다");
@@ -613,17 +629,13 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				for(int i=0;i<=100;i++)
 				{
 					gr.bar.setValue(i);
-					Thread.sleep(100);
-					
-					if(i==100)
+					Thread.sleep(500);
+					if(i>=100)
 					{
-						out.write((Function.NEXT+"|"+myRoom+"|"+(++imageNo)+"\n").getBytes());
-						break;
+						out.write((Function.END+"|"+myRoom+"\n").getBytes());
 					}
 				}
 				
-				
-				//imageNo++;
 			}catch(Exception ex) {}
 		}
 	}

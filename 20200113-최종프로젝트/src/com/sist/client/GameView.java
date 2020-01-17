@@ -9,7 +9,15 @@ public class GameView extends JPanel{
     }
     public void setImage(int no)
     {
-    	back=Toolkit.getDefaultToolkit().getImage("c:\\image\\"+no+".png");
+    	if(no==0)
+    	{
+    		back=Toolkit.getDefaultToolkit().getImage("c:\\image\\"+no+".jpg");
+    	}
+    	else
+    	{
+    	  back=Toolkit.getDefaultToolkit().getImage("c:\\image\\"+no+".png");
+    
+    	}
     }
 	@Override
 	public void paint(Graphics g) {

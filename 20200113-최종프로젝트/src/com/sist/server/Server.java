@@ -18,7 +18,7 @@ public class Server implements Runnable{
 		{
 			ss=new ServerSocket(PORT);//bind,listen
 			System.out.println("Server Start...");
-		}catch(Exception ex){}
+		}catch(Exception ex){System.out.println(ex.getMessage());}
 	}
 	// 立加矫 贸府 
     public void run()
@@ -334,6 +334,11 @@ public class Server implements Runnable{
 								   }
 							  }
 						   }
+						   break;
+					   }
+					   case Function.END:
+					   {
+						   messageTo(Function.END+"|");  
 						   break;
 					   }
 					}
