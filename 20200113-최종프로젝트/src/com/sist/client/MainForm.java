@@ -15,6 +15,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
    WaitRoom wr=new WaitRoom();
    GameRoom gr=new GameRoom();
    MakeRoom mr=new MakeRoom();
+   InvateForm invate=new InvateForm();
    CardLayout card=new CardLayout();
    // 서버 연결과 관련된 라이브러리
    Socket s;// 서버연결
@@ -58,6 +59,10 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 	  gr.b4.addActionListener(this);
 	  
 	  gr.dapTf.addActionListener(this);
+	  
+	  gr.b1.addActionListener(this);
+	  invate.b.addActionListener(this);
+	  invate.table.addMouseListener(this);
    }
    public static void main(String[] args) {
 	   try
@@ -254,7 +259,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 			}
 			gr.games.setImage(imageNo);
 			gr.games.repaint();
-			
+			gr.dapTf.requestFocus();
 		}
 		else if(e.getSource()==gr.dapTf)
 		{
@@ -269,6 +274,37 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 			{
 				gr.daps[imageNo+9].setIcon(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\x.png"), 65, 40)));
 			}
+			
+			gr.dapTf.setText("");
+			
+		}
+		else if(e.getSource()==gr.b1)
+		{
+			for(int i=invate.model.getRowCount()-1;i>=0;i--)
+			{
+				 invate.model.removeRow(i);
+			}
+			
+			for(int i=0;i<wr.model2.getRowCount();i++)
+			{
+				String pos=wr.model2.getValueAt(i, 3).toString();
+				if(pos.equals("대기실"))
+				{
+					String[] data={
+							wr.model2.getValueAt(i, 0).toString(),
+							wr.model2.getValueAt(i, 1).toString(),
+							wr.model2.getValueAt(i, 2).toString()
+					};
+					
+					invate.model.addRow(data);
+				}
+			}
+			
+			invate.setVisible(true);
+		}
+		else if(e.getSource()==invate.b)
+		{
+			invate.setVisible(false);
 		}
 	}// actionPerformed end
 	public void connection(String userData)
@@ -396,7 +432,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					  }
 					  
 					  gr.bar.setValue(0);
-					 
+					  gr.b1.setEnabled(true);
 					  break;
 				  }
 				  case Function.ROOMADD:
@@ -543,6 +579,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				  {
 					  //JOptionPane.showMessageDialog(this, st.nextToken());
 					  gr.ta.append(st.nextToken()+"\n");
+					  gr.b1.setEnabled(false);
 					  gr.games.setImage(0);
 					  gr.games.repaint();
 					  pt=new ProgressThread();
@@ -554,6 +591,31 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				  {
 					  System.out.println("정답:"+count);
 					  JOptionPane.showMessageDialog(this, "게임이 종료되었습니다");
+				      break;
+				  }
+				  case Function.INVATE:
+				  {
+					  String yid=st.nextToken();
+					  String rn=st.nextToken();
+					  int sel=JOptionPane.showConfirmDialog(this,
+							  yid+"님이 "+rn+"방으로 초대하셨습니다\n승낙하시겠습니까?","초대하기",
+							  JOptionPane.YES_NO_OPTION);
+					  if(sel==JOptionPane.YES_OPTION)
+					  {
+						  out.write((Function.ROOMIN+"|"+rn+"\n").getBytes());
+					  }
+					  else
+					  {
+						  out.write((Function.INVATE_NO+"|"+yid+"\n").getBytes());
+					  }
+					  break;
+				  }
+				  case Function.INVATE_NO:
+				  {
+					  String yid=st.nextToken();
+					  JOptionPane.showMessageDialog(this, 
+							  yid+"님이 초대를 거절하셨습니다");
+					  break;
 				  }
 				}
 				
@@ -619,6 +681,19 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				
 			}
 		}
+		else if(e.getSource()==invate.table)
+		{
+			if(e.getClickCount()==2)
+			{
+				int row=invate.table.getSelectedRow();
+				String yid=invate.model.getValueAt(row,0).toString();
+				try
+				{
+					out.write((Function.INVATE+"|"+yid+"|"+myRoom+"\n").getBytes());
+				}catch(Exception ex){}
+				invate.setVisible(false);
+			}
+		}
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
@@ -653,6 +728,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					Thread.sleep(500);
 					if(i>=100)
 					{
+						interrupt();
 						out.write((Function.END+"|"+myRoom+"\n").getBytes());
 					}
 				}

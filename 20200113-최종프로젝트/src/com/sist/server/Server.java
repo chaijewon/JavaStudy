@@ -341,6 +341,33 @@ public class Server implements Runnable{
 						   messageTo(Function.END+"|");  
 						   break;
 					   }
+					   case Function.INVATE:
+					   {
+						   String yid=st.nextToken();
+						   String rn=st.nextToken();
+						   for(Client user:waitVc)
+						   {
+							   if(yid.equals(user.id))
+							   {
+								   user.messageTo(Function.INVATE+"|"+id+"|"+rn);
+								   break;
+							   }
+						   }
+						   break;
+					   }
+					   case Function.INVATE_NO:
+					   {
+						   String yid=st.nextToken();
+						   for(Client user:waitVc)
+						   {
+							   if(yid.equals(user.id))
+							   {
+								   user.messageTo(Function.INVATE_NO+"|"+id);
+								   break;
+							   }
+						   }
+						   break;
+					   }
 					}
 				}
 			}catch(Exception ex) {}
