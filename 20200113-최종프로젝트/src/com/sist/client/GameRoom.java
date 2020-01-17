@@ -16,6 +16,8 @@ public class GameRoom extends JPanel{
    JLabel la=new JLabel("정답입력");
    JProgressBar bar=new JProgressBar();
    JTextField dapTf=new JTextField(15);
+   
+   JLabel[] daps=new JLabel[20];
    public GameRoom()
    {
 	   for(int i=0;i<6;i++)
@@ -74,7 +76,7 @@ public class GameRoom extends JPanel{
 	   bar.setMinimum(0);
 	   bar.setStringPainted(true);
 	   //games.setBackground(Color.white);
-	   games.setBounds(170, 15, 670, 400);
+	   games.setBounds(170, 15, 670, 300);
 	   add(games);
 	   
 	   JPanel pp=new JPanel();
@@ -105,6 +107,23 @@ public class GameRoom extends JPanel{
 	   p.add(b1);p.add(box);p.add(b2);p.add(b3);p.add(b4);p.add(b5);
 	   p.setBounds(850, 510, 150, 210);
 	   add(p);
+	   
+	   JPanel ppp=new JPanel();
+	   ppp.setLayout(new GridLayout(2,10,3,3));
+	   for(int i=0;i<20;i++)
+	   {
+		  daps[i]=new JLabel();
+		  ppp.add(daps[i]);
+	   }
+	   
+	   for(int i=0;i<10;i++)
+	   {
+		   daps[i].setIcon(new ImageIcon(getImageSizeChange(new ImageIcon("c:\\image\\c"+(i+1)+".png"), 65, 40)));
+	   }
+	   
+	   //170, 15, 670, 300
+	   ppp.setBounds(170, 320, 670, 95);
+	   add(ppp);
    }
    public Image getImageSizeChange(ImageIcon icon,int width,int height)
    {

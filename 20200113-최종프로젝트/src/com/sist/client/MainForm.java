@@ -10,6 +10,7 @@ import java.util.*;
 import java.net.*;
 import java.io.*;
 public class MainForm extends JFrame implements ActionListener,Runnable,MouseListener{
+   String[] dap= {"a","b","c","d","e","f","g","h","i","j"};
    Login login=new Login();
    WaitRoom wr=new WaitRoom();
    GameRoom gr=new GameRoom();
@@ -26,6 +27,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
     */
    String myRoom,myId;
    int imageNo=1;
+   int count=0;
    ProgressThread pt;
    MainForm() {
 	   pt=new ProgressThread();
@@ -54,6 +56,8 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 	  gr.b2.addActionListener(this);// 강퇴
 	  gr.b3.addActionListener(this);
 	  gr.b4.addActionListener(this);
+	  
+	  gr.dapTf.addActionListener(this);
    }
    public static void main(String[] args) {
 	   try
@@ -178,7 +182,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 			
 			// 공개 비공개
 			String rs="";//상태
-			String rp="";//비밀번호 
+			String rp=" ";//비밀번호 
 			if(mr.rb1.isSelected())
 			{
 				rs="공개";
@@ -237,6 +241,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 		{
 			gr.games.setImage(imageNo);
 			gr.games.repaint();
+			count=0;
 		}
 		else if(e.getSource()==gr.b4)
 		{
@@ -244,11 +249,26 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 			if(imageNo>10)
 			{
 			   System.out.println("게임종료!!");
+			   System.out.println("정답:"+count);
 			   return;
 			}
 			gr.games.setImage(imageNo);
 			gr.games.repaint();
 			
+		}
+		else if(e.getSource()==gr.dapTf)
+		{
+			String data=gr.dapTf.getText();
+			System.out.println(data+"|"+dap[imageNo-1]);
+			if(data.equals(dap[imageNo-1]))
+			{
+				gr.daps[imageNo+9].setIcon(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\o.png"), 65, 40)));
+				count++;
+			}
+			else
+			{
+				gr.daps[imageNo+9].setIcon(new ImageIcon(gr.getImageSizeChange(new ImageIcon("c:\\image\\x.png"), 65, 40)));
+			}
 		}
 	}// actionPerformed end
 	public void connection(String userData)
@@ -532,6 +552,7 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				  
 				  case Function.END:
 				  {
+					  System.out.println("정답:"+count);
 					  JOptionPane.showMessageDialog(this, "게임이 종료되었습니다");
 				  }
 				}
