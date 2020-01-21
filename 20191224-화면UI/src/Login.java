@@ -4,6 +4,7 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -23,6 +24,11 @@ public class Login extends JPanel{
     JPasswordField pf;
     JButton b1,b2;
     Login(){
+    	String[] bname= {"수락","거절"};
+    	JOptionPane.showOptionDialog(this, "초대하기","초대하기",
+    			JOptionPane.YES_NO_OPTION,
+    			JOptionPane.QUESTION_MESSAGE,null,
+    			bname,bname[0]);
     	setLayout(null);
     	back=Toolkit.getDefaultToolkit().getImage("c:\\image\\back.png");
         la1=new JLabel("ID",JLabel.RIGHT);
