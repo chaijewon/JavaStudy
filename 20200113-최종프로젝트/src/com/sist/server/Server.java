@@ -45,7 +45,6 @@ public class Server implements Runnable{
 	{
 		String id,name,sex,pos;
 		int avata,score,rank;
-		boolean bCheck;
 		// pos=> 방위치 
 		// 통신 
 		Socket s;// 통신장비 
@@ -314,32 +313,53 @@ public class Server implements Runnable{
 						   }
 						   break;
 					   }
-					   case Function.NEXT:
-					   {
-						   String rn=st.nextToken();
-						   String imageNo=st.nextToken();
-						   for(Room room:roomVc)
-						   {
-							  if(room.roomName.equals(rn))
-							  {
-								   for(Client user:room.userVc)
-								   {
-									   if(Integer.parseInt(imageNo)>10)
-									   {
-										   user.messageTo(Function.END+"|");
-									   }
-									   else
-									   {
-										   user.messageTo(Function.NEXT+"|"+imageNo);
-									   }
-								   }
-							  }
-						   }
-						   break;
-					   }
+					   
 					   case Function.END:
 					   {
-						   messageTo(Function.END+"|");  
+						   String rn=st.nextToken();
+						   String jumsu=st.nextToken();
+						   for(int i=0;i<roomVc.size();i++)
+						   {
+							   Room room=roomVc.get(i);
+							   if(rn.equals(room.roomName))
+							   {
+							       room.end++;
+							       score=Integer.parseInt(jumsu);
+							       if(room.end==room.current)
+							       {
+							    	   String temp="";
+							    	   for(int a=0;a<room.userVc.size();a++)
+							    	   {
+							    		   Client user1=room.userVc.get(a);
+							    		   user1.rank=1;
+							    		   for(int b=0;b<room.userVc.size();b++)
+							    		   {
+							    			   Client user2=room.userVc.get(b);
+							    			   if(user1.score<user2.score)
+							    			   {
+							    				   user1.rank++;
+							    			   }
+							    		   }
+							    	   }
+							    	   /*
+							    	    *   hong /90 /1 @
+							    	    *   shim /80 /3 @
+							    	    *   kim /85  /2 
+							    	    */
+							    	   for(Client user:room.userVc)
+							    	   {
+							    		   temp+=user.id+"/"+user.score+"/"+user.rank+"@";
+							    	   }
+							    	   temp=temp.substring(0,temp.lastIndexOf("@"));
+							    	   System.out.println(temp);
+							    	   for(Client user:room.userVc)
+							    	   {
+							    		   user.messageTo(Function.END+"|"+temp);
+							    	   }
+							       }
+							       break;
+							   }
+						   }
 						   break;
 					   }
 					   case Function.INVATE:

@@ -254,7 +254,10 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 			if(imageNo>10)
 			{
 			   System.out.println("게임종료!!");
-			   System.out.println("정답:"+count);
+			    try
+			    {
+			    	out.write((Function.END+"|"+myRoom+"|"+(count*10)+"\n").getBytes());
+			    }catch(Exception ex) {}
 			   return;
 			}
 			gr.games.setImage(imageNo);
@@ -589,8 +592,18 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				  
 				  case Function.END:
 				  {
-					  System.out.println("정답:"+count);
-					  JOptionPane.showMessageDialog(this, "게임이 종료되었습니다");
+					  String temp=st.nextToken();
+					  String[] score=temp.split("@");
+					  String data="";
+					  int i=0;
+					  // hong/80/1
+					  for(String s:score)
+					  {
+						  StringTokenizer ss=new StringTokenizer(s,"/");
+						  data+=ss.nextToken()+"("+ss.nextToken()+") ☞"+ss.nextToken()+"위\n";
+					  }
+					  data=data.substring(0,data.lastIndexOf("\n"));
+					  JOptionPane.showMessageDialog(this, data);
 				      break;
 				  }
 				  case Function.INVATE:
