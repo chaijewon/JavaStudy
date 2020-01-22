@@ -5,6 +5,7 @@ public class Room {
    int current,maxcount;
    String bang="";
    Vector<Server.Client> userVc=new Vector<Server.Client>();
+   
    public Room(String roomName, String roomState, String roomPwd, int maxcount) {
 	    
 		this.roomName = roomName;

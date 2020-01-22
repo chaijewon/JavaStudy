@@ -597,9 +597,12 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 				  {
 					  String yid=st.nextToken();
 					  String rn=st.nextToken();
-					  int sel=JOptionPane.showConfirmDialog(this,
-							  yid+"님이 "+rn+"방으로 초대하셨습니다\n승낙하시겠습니까?","초대하기",
-							  JOptionPane.YES_NO_OPTION);
+					  String[] bname= {"수락","거절"};
+					  int sel=JOptionPane.showOptionDialog(this, yid+"님이 "+rn+"방으로 초대하셨습니다\n승낙하시겠습니까?","초대하기",
+				    			JOptionPane.YES_NO_OPTION,
+				    			JOptionPane.QUESTION_MESSAGE,null,
+				    			bname,bname[0]);
+							  
 					  if(sel==JOptionPane.YES_OPTION)
 					  {
 						  out.write((Function.ROOMIN+"|"+rn+"\n").getBytes());

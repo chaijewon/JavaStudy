@@ -44,7 +44,8 @@ public class Server implements Runnable{
 	class Client extends Thread
 	{
 		String id,name,sex,pos;
-		int avata,score;
+		int avata,score,rank;
+		boolean bCheck;
 		// pos=> 방위치 
 		// 통신 
 		Socket s;// 통신장비 
