@@ -251,13 +251,11 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 		else if(e.getSource()==gr.b4)
 		{
 			imageNo++;
-			if(imageNo>10)
+			if(imageNo>9)
 			{
 			   System.out.println("게임종료!!");
-			    try
-			    {
-			    	out.write((Function.END+"|"+myRoom+"|"+(count*10)+"\n").getBytes());
-			    }catch(Exception ex) {}
+			    
+			    gr.b4.setEnabled(false);
 			   return;
 			}
 			gr.games.setImage(imageNo);
@@ -744,8 +742,9 @@ public class MainForm extends JFrame implements ActionListener,Runnable,MouseLis
 					Thread.sleep(500);
 					if(i>=100)
 					{
+						JOptionPane.showMessageDialog(MainForm.this, "게임이 종료되었습니다");
 						interrupt();
-						out.write((Function.END+"|"+myRoom+"\n").getBytes());
+						out.write((Function.END+"|"+myRoom+"|"+(count*10)+"\n").getBytes());
 					}
 				}
 				
